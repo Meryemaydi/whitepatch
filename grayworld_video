@@ -1,0 +1,33 @@
+import numpy as np
+import cv2
+
+def gray_world(frame):
+    """Applies Gray World algorithm to a single frame."""
+    frame_grayworld = ((frame * (frame.mean() / frame.mean(axis=(0, 1)))).clip(0, 255).astype(np.uint8))
+
+    if frame.shape[2] == 4:
+        frame_grayworld[:, :, 3] = 255
+
+    return frame_grayworld
+
+
+cap = cv2.VideoCapture('mucize.mp4')
+
+while True:
+    ret, frame = cap.read()
+
+    if not ret:
+        print("Error reading frame from video!")
+        break
+
+    frame_grayworld = gray_world(frame)
+
+  
+    cv2.imshow('Original Video', frame)
+    cv2.imshow('Gray World Corrected Video', frame_grayworld)
+
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+
+cap.release()
