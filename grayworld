@@ -1,0 +1,25 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage import io, img_as_ubyte
+from skimage.io import imread, imshow
+
+def gray_world(image):
+    image_grayworld = ((image * (image.mean() / image.mean(axis=(0, 1)))).clip(0, 255).astype(int))
+
+    if image.shape[2] == 4:
+        image_grayworld[:, :, 3] = 255
+
+    fig, ax = plt.subplots(1, 2, figsize=(14, 10))
+    ax[0].imshow(image)
+    ax[0].set_title('Original Image')
+    ax[0].axis('off')
+
+    ax[1].imshow(image_grayworld)
+    ax[1].set_title('Gray World Corrected Image')
+    ax[1].axis('off')
+
+    plt.show()
+    
+image = imread('/home/meryem/Desktop/mario.png')
+
+gray_world(image)
